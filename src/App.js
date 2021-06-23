@@ -138,18 +138,23 @@ class App extends Component {
 
   EditContent = (ev, i) => {
     let data = this.state.data;
-    data[i].text = ev.target.value;
+    // let difpost = data[i].content;
+    // data[i].content.push(difpost);
+    this.state.text='';
     this.setState({data});
 }
+  EditCMT = (ev, i, index) => {
+
+  }
 
   render() {
-    let {data, modal} = this.state;
+    let {data, modal, user} = this.state;
     let arr = Object.values(data).map(key => key);
     // user-post
     let item = arr.map((c, i) => {
           return (
             <div className="App">
-            <Container className="appDemo" style={{padding:"20px", border:"2px solid black", padding:"20px"}}>
+            <Container className="appDemo" style={{padding:"20px", border:"1px solid black", padding:"20px"}}>
               <Row className = "post"> 
                    <Col className = "avartar" xs="3">
                        <CardImg src alt style={{border : "2px solid black", height:"70px"}}></CardImg>
@@ -157,10 +162,10 @@ class App extends Component {
                    </Col>
                    <Col className="content" xs="9" >
                      <span  style={{width:"101%", height:"300px"}} type="text" >{c.content}</span>
-                     <button  onClick={(ev) => this.toggle(ev, i)}>Edit</button>
+                     <button  onClick={(ev) => this.toggle(ev, i)} style={{display:(user.id === c.id) ? "block" : "none"}}>Edit</button>
                    </Col>
               </Row>
-     
+                {/* //comment */}
               <Row className = "Comment-other" style={{marginTop: "10px"}}>
                     <Col xs={{ 'size' : '10', 'offset' : '2'  }}>
                       {c.comment.map((cm, index) => {
@@ -176,7 +181,7 @@ class App extends Component {
                                      <button class="material-icons" style={{fontSize:"20px", color : c.comment[index].like ? 'blue' : null, 'cursor' : 'pointer'}} onClick={ev => this.likeComment(ev, i, index)}>like</button>
                                   </Col>
                                   <Col xs={1}>
-                                  {/* <Button onClick={this.toggle}>Edit</Button> */}
+                                  <button  onClick={(ev) => this.toggle(ev, i)} style={{display:(user.name === cm.author) ? "block" : "none"}}>Edit</button>
                                  </Col>
                                  </Row>
                                     )
@@ -208,10 +213,10 @@ class App extends Component {
           <Modal isOpen={modal}  toggle={(ev)=>this.toggle(ev, 0)}>
               <ModalHeader toggle={(ev)=>this.toggle(ev, 0)}>Modal title</ModalHeader>
               <ModalBody>
-                <span type="textarea" className="inputPost" defaultValue={this.PostOut()} >{this.PostOut()}</span>
+                <input type="textarea" className="inputPost" defaultValue={this.PostOut()} onChange={(ev) => this.EditContent(ev)}></input>
               </ModalBody>
               <ModalFooter>
-              <Button color="primary">Update</Button>
+              <Button color="primary" onClick={(ev) => this.EditContent(ev)}>Update</Button>
               <Button color="secondary" onClick={(ev)=>this.toggle(ev, 0)}>Cancel</Button>
               </ModalFooter>
           </Modal>
