@@ -1,7 +1,7 @@
-import logo from './logo.svg';
+// import logo from './logo.svg';
 import './App.css';
 import React,{Component} from 'react';
-import { Button, Col, Container, Row , Label,CardImg,input, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
+import { Button, Col, Container, Row ,CardImg, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.css';
 
 class App extends Component {
@@ -11,6 +11,8 @@ class App extends Component {
               data: [],
               user: {},
               status: false,
+              index: 0,
+              modal:false,
               text: '',
         }
   }
@@ -29,6 +31,7 @@ class App extends Component {
         [
             {
             author : "Trung",
+            id: '1910',
             content : "content 1",
             text: '',
             comment : [
@@ -49,6 +52,29 @@ class App extends Component {
 
             {
             author : "Nhung",
+            id: '2304',
+            content : "content 2",
+            text: '',
+            comment : [
+                {
+                    author : "User 3",
+                    content : "Super thought out! I think clients would love this.",
+                    like: false,
+                    dislike: false,
+                },
+    
+                {
+                    author : "User 4",
+                    content : "SBackground image, hero, shapes, concept – beastly :-)",
+                    like: false,
+                    dislike: false,
+                },
+            ],
+        },
+
+        {
+            author : "Tuan",
+            id: '1810',
             content : "content 2",
             text: '',
             comment : [
@@ -97,11 +123,24 @@ class App extends Component {
           data
       });
   }
-  toggle = () => {
-      this.setState({
-          modal: !this.state.modal
-      })
+  toggle = (ev,i) => {
+      let data = this.state.data; 
+      this.setState({modal: !this.state.modal});
+      this.state.index =i ;
+      this.state.text = data[i].content;
+     
+  };
+
+  PostOut = (ev, i ) =>{
+    let out = this.state.text;
+     return out;
   }
+
+  EditContent = (ev, i) => {
+    let data = this.state.data;
+    data[i].text = ev.target.value;
+    this.setState({data});
+}
 
   render() {
     let {data, modal} = this.state;
@@ -118,7 +157,7 @@ class App extends Component {
                    </Col>
                    <Col className="content" xs="9" >
                      <span  style={{width:"101%", height:"300px"}} type="text" >{c.content}</span>
-                     <Button onClick={this.toggle}>Edit</Button>
+                     <button  onClick={(ev) => this.toggle(ev, i)}>Edit</button>
                    </Col>
               </Row>
      
@@ -137,7 +176,7 @@ class App extends Component {
                                      <button class="material-icons" style={{fontSize:"20px", color : c.comment[index].like ? 'blue' : null, 'cursor' : 'pointer'}} onClick={ev => this.likeComment(ev, i, index)}>like</button>
                                   </Col>
                                   <Col xs={1}>
-                                  <Button onClick={this.toggle}>Edit</Button>
+                                  {/* <Button onClick={this.toggle}>Edit</Button> */}
                                  </Col>
                                  </Row>
                                     )
@@ -166,14 +205,14 @@ class App extends Component {
       </Container>
       <div>
           
-          <Modal isOpen={modal} toggle={this.toggle}>
-              <ModalHeader toggle={this.toggle}>Modal title</ModalHeader>
+          <Modal isOpen={modal}  toggle={(ev)=>this.toggle(ev, 0)}>
+              <ModalHeader toggle={(ev)=>this.toggle(ev, 0)}>Modal title</ModalHeader>
               <ModalBody>
-                  {data.content}
+                <span type="textarea" className="inputPost" defaultValue={this.PostOut()} >{this.PostOut()}</span>
               </ModalBody>
               <ModalFooter>
-              <Button color="primary" onClick={this.toggle}>Update</Button>{' '}
-              <Button color="secondary" onClick={this.toggle}>Cancel</Button>
+              <Button color="primary">Update</Button>
+              <Button color="secondary" onClick={(ev)=>this.toggle(ev, 0)}>Cancel</Button>
               </ModalFooter>
           </Modal>
       </div>
