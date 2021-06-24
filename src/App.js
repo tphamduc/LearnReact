@@ -11,7 +11,10 @@ class App extends Component {
               data: [],
               user: {},
               status: false,
+              status_cmt: 'block',
+            status_recmt:'none',
               index: 0,
+              indez :0,
               modal:false,
               text: '',
         }
@@ -128,24 +131,50 @@ class App extends Component {
       this.setState({modal: !this.state.modal});
       this.state.index =i ;
       this.state.text = data[i].content;
-     
   };
 
-  PostOut = (ev, i ) =>{
-    let out = this.state.text;
-     return out;
-  }
+  TEXTFIX = (ev) =>{
+    this.state.text = ev.target.value;
+}
 
-  EditContent = (ev, i) => {
+  EditContent = () => {
     let data = this.state.data;
-    // let difpost = data[i].content;
-    // data[i].content.push(difpost);
-    this.state.text='';
-    this.setState({data});
+        let ix = this.state.index;
+        if(typeof(data[ix]) != 'undefinded' )
+        {
+            data[ix].content = this.state.text;
+        }
+        this.setState({data,
+            modal: !this.state.modal})
+}
+EditContentCMT = () => {
+    let data = this.state.data;
+        let ix = this.state.index;
+        console.log(ix);
+        let iz = this.state.indez;
+        console.log(iz);
+        if(typeof(data[ix].comment[iz]) != 'undefinded' )
+        {
+            console.log(data[ix].comment[iz]);
+            data[ix].comment[iz].content = this.state.text;
+        }
+        this.setState({data,
+            modal: !this.state.modal})
 }
   EditCMT = (ev, i, index) => {
-
+    let data = this.state.data;
+    this.setState({modal: !this.state.modal});
+    this.state.indez = index;
+    console.log(this.state.indez);
+    this.state.text = data[i].comment[index].content;
+    this.setState({data});
   }
+
+  PostOut = () => {
+    let out = this.state.text;
+    return out;
+}
+
 
   render() {
     let {data, modal, user} = this.state;
@@ -181,7 +210,7 @@ class App extends Component {
                                      <button class="material-icons" style={{fontSize:"20px", color : c.comment[index].like ? 'blue' : null, 'cursor' : 'pointer'}} onClick={ev => this.likeComment(ev, i, index)}>like</button>
                                   </Col>
                                   <Col xs={1}>
-                                  <button  onClick={(ev) => this.toggle(ev, i)} style={{display:(user.name === cm.author) ? "block" : "none"}}>Edit</button>
+                                  <button  onClick={(ev) => this.EditCMT(ev, i, index)} style={{display:(user.name === cm.author) ? "block" : "none"}}>Edit</button>
                                  </Col>
                                  </Row>
                                     )
@@ -213,10 +242,11 @@ class App extends Component {
           <Modal isOpen={modal}  toggle={(ev)=>this.toggle(ev, 0)}>
               <ModalHeader toggle={(ev)=>this.toggle(ev, 0)}>Modal title</ModalHeader>
               <ModalBody>
-                <input type="textarea" className="inputPost" defaultValue={this.PostOut()} onChange={(ev) => this.EditContent(ev)}></input>
+                <input type="textarea" className="inputPost" defaultValue={this.PostOut()} onChange={(ev) => this.TEXTFIX(ev)}></input>
               </ModalBody>
               <ModalFooter>
-              <Button color="primary" onClick={(ev) => this.EditContent(ev)}>Update</Button>
+              <Button color="primary" onClick={this.EditContent} >Update</Button>
+              <Button color="primary" onClick={this.EditContentCMT}>UpdateCMT</Button>
               <Button color="secondary" onClick={(ev)=>this.toggle(ev, 0)}>Cancel</Button>
               </ModalFooter>
           </Modal>
@@ -224,5 +254,4 @@ class App extends Component {
   </div>)
 }
 }
-
 export default App;
