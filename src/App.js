@@ -130,6 +130,7 @@ class App extends Component {
       let data = this.state.data; 
       this.setState({modal: !this.state.modal});
       this.state.index =i ;
+      console.log(this.state.index);
       this.state.text = data[i].content;
   };
 
@@ -150,9 +151,7 @@ class App extends Component {
 EditContentCMT = () => {
     let data = this.state.data;
         let ix = this.state.index;
-        console.log(ix);
         let iz = this.state.indez;
-        console.log(iz);
         if(typeof(data[ix].comment[iz]) != 'undefinded' )
         {
             console.log(data[ix].comment[iz]);
@@ -164,8 +163,8 @@ EditContentCMT = () => {
   EditCMT = (ev, i, index) => {
     let data = this.state.data;
     this.setState({modal: !this.state.modal});
+    this.state.index = i;
     this.state.indez = index;
-    console.log(this.state.indez);
     this.state.text = data[i].comment[index].content;
     this.setState({data});
   }
